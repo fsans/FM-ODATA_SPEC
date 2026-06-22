@@ -1,0 +1,47 @@
+{
+  "name": "@fm-odata/spec-ts",
+  "version": "1.0.0",
+  "description": "Shared TypeScript types for the FileMaker OData API specification",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "filemaker",
+    "claris",
+    "odata",
+    "spec",
+    "types",
+    "fms",
+    "api"
+  ],
+  "author": "fsans",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fsans/FM-ODATA_SPEC",
+    "directory": "packages/fm-odata-spec-ts"
+  },
+  "homepage": "https://github.com/fsans/FM-ODATA_SPEC",
+  "bugs": {
+    "url": "https://github.com/fsans/FM-ODATA_SPEC/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.0",
+    "typescript": "^5.5.0"
+  }
+}
