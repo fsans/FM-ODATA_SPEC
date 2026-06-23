@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://fm-odata.dev/schema/fm-odata-capabilities.json",
+  "$id": "https://fms-odata.dev/schema/fms-odata-capabilities.json",
   "title": "FileMaker OData API Capabilities Manifest",
   "description": "Machine-readable manifest of FileMaker Server OData API capabilities across versions. Downstream libraries can import this to programmatically check feature availability.",
   "specVersion": "1.0.0",

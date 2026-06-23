@@ -1,8 +1,8 @@
 /**
- * @fm-odata/spec-ts — Shared TypeScript types for the FileMaker OData API specification.
+ * @fms-odata/spec-ts — Shared TypeScript types for the FileMaker OData API specification.
  *
  * These types describe the FileMaker Server OData API surface as documented in
- * the FM-ODATA_SPEC repository (https://github.com/fsans/FM-ODATA_SPEC).
+ * the fms-odata-spec repository (https://github.com/fsans/fms-odata-spec).
  * Downstream libraries (MCP servers, JS wrappers, etc.) should depend on this
  * package for shared type definitions.
  */

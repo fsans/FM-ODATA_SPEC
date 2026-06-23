@@ -85,7 +85,7 @@ If none of the above match, look for any annotation whose term name contains "Ve
 The version string may include a build number suffix (e.g. `"21.1.2.500"`). Parse the first three numeric segments as `major.minor.patch` and ignore the rest.
 
 **Implementation reference:**
-The `@fm-odata/spec-ts` package provides `parseServerVersion(metadataXml)` which implements all 4 strategies plus the generic fallback, returning an `FMServerVersion` object `{ major, minor, patch, raw }`. Downstream libraries should use this function rather than reimplementing the parsing logic.
+The `@fms-odata/spec-ts` package provides `parseServerVersion(metadataXml)` which implements all 4 strategies plus the generic fallback, returning an `FMServerVersion` object `{ major, minor, patch, raw }`. Downstream libraries should use this function rather than reimplementing the parsing logic.
 
 ## Value lists in metadata
 

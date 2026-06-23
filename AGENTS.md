@@ -7,8 +7,8 @@ Guidance for AI agents (Devin, Claude, Cursor, etc.) working on this repository.
 This is a **specification repository**, not a runnable application. It contains:
 
 1. Markdown documentation (`docs/`) — the human-readable spec.
-2. A JSON capability manifest (`schema/fm-odata-capabilities.json`) — machine-readable.
-3. A TypeScript types package (`packages/fm-odata-spec-ts/`) — shared types for downstream libraries.
+2. A JSON capability manifest (`schema/fms-odata-capabilities.json`) — machine-readable.
+3. A TypeScript types package (`packages/fms-odata-spec-ts/`) — shared types for downstream libraries.
 
 ## Key conventions
 
@@ -36,7 +36,7 @@ This is a **specification repository**, not a runnable application. It contains:
 - Semantic versioning: `vMAJOR.MINOR.PATCH`.
 - Annotated tags only (`git tag -a`), never lightweight tags.
 - Tags only on `main`, never on `develop`.
-- If `@fm-odata/spec-ts` package version changes, the tag must match it.
+- If `@fms-odata/spec-ts` package version changes, the tag must match it.
 
 ## When updating the spec for a new FileMaker Server release
 
@@ -44,15 +44,15 @@ This is a **specification repository**, not a runnable application. It contains:
 2. Update `docs/12-version-deltas.md` with a new section for the release.
 3. Update `docs/01-conformance.md` if conformance level or supported/unsupported features changed.
 4. Update `docs/13-quirks.md` if new quirks or bug fixes were observed.
-5. Update `schema/fm-odata-capabilities.json` with new version entry and feature flags.
-6. Update `packages/fm-odata-spec-ts/src/versions.ts` with the new version constant and feature matrix.
+5. Update `schema/fms-odata-capabilities.json` with new version entry and feature flags.
+6. Update `packages/fms-odata-spec-ts/src/versions.ts` with the new version constant and feature matrix.
 7. Update `README.md` version table if a new version was added.
 
 ## File structure rules
 
 - `_research/` is gitignored — never commit cloned repos.
 - `docs/` files are numbered (`00-`, `01-`, ...) for reading order.
-- `packages/fm-odata-spec-ts/` is a publishable npm package (`@fm-odata/spec-ts`).
+- `packages/fms-odata-spec-ts/` is a publishable npm package (`@fms-odata/spec-ts`).
 - `schema/` contains only the single capabilities JSON manifest.
 
 ## Verification
@@ -60,7 +60,7 @@ This is a **specification repository**, not a runnable application. It contains:
 There is no build step for the docs. For the TS package:
 
 ```bash
-cd packages/fm-odata-spec-ts
+cd packages/fms-odata-spec-ts
 npm install
 npm run build      # tsc --emitDeclarationOnly
 npm run typecheck  # tsc --noEmit
