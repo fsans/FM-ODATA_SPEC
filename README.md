@@ -126,6 +126,7 @@ This repository uses a Git Flow-style workflow:
 | `v1.0.0` | `a8c7d9a` | Initial spec: 15 docs, JSON manifest, spec-ts types package |
 | `v1.1.0` | `307389f` | Multi-strategy version detection aligned with FMS-ODATA-MCP |
 | `v1.1.1` | `b3b23ba` | Script result envelope fix + FMS v26 quirks |
+| `v1.2.0` | `b72ab04` | Complete fm-odata -> fms-odata rename (package, directory, schema, all references) |
 
 ## License
 
