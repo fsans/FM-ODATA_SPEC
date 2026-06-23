@@ -112,6 +112,12 @@ OData API was introduced in FileMaker 19. This is the baseline feature set.
 - Leverage AIAnnotation for AI-powered tooling (e.g., MCP servers can use it to describe fields to AI agents).
 - Use FMComment for human-readable field documentation in tooling.
 
+### Known issues
+
+- **`$apply` aggregate() parser bug**: `aggregate(...)` transformation expressions fail with `parse failure in URL at: ')'` (error code -1002). The `$metadata` advertises support for `aggregate` via `ApplySupportedDefaults`, but only `groupby((fields))` works in practice. See [docs/13-quirks.md](13-quirks.md) for details.
+- **Single-field `groupby` failure**: `groupby((single_field))` may fail with error 8309. Include at least two fields in the groupby clause.
+- **Missing `ProductVersion` annotation**: Some FMS v26 deployments do not include the `Org.OData.Core.V1.ProductVersion` annotation in `$metadata`, causing version detection to return `null`. The `ServerVersion` annotation (also v26+) may be present as an alternative. See [docs/05-metadata.md](05-metadata.md) for multi-strategy version detection.
+
 ## Future / next
 
 This section is reserved for announced or upcoming changes. As of this spec version, no specific future changes have been officially announced beyond what is in Claris 2026.

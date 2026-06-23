@@ -74,3 +74,38 @@ export function scriptRequestBody(options?: ScriptOptions): string | undefined {
   const param = options.parameter;
   return JSON.stringify({ scriptParameterValue: param });
 }
+
+/**
+ * Parse the raw JSON response from a script invocation into a ScriptResult.
+ *
+ * FMS returns a nested envelope:
+ * ```json
+ * {"scriptResult": {"code": 0, "resultParameter": "Hello World"}}
+ * ```
+ *
+ * This helper extracts `code` and `resultParameter` from the nested object.
+ * A non-zero code indicates a script error.
+ */
+export function parseScriptResponse(raw: unknown): ScriptResult {
+  if (raw === null || typeof raw !== 'object') {
+    return { code: 0, raw };
+  }
+
+  const obj = raw as Record<string, unknown>;
+  const scriptResult = obj.scriptResult;
+
+  if (scriptResult !== null && typeof scriptResult === 'object') {
+    const nested = scriptResult as { code?: unknown; resultParameter?: unknown };
+    return {
+      code: nested.code !== undefined ? Number(nested.code) : 0,
+      resultParameter: nested.resultParameter !== undefined ? String(nested.resultParameter) : undefined,
+      raw,
+    };
+  }
+
+  // Fallback for older FMS versions that may use flat shape
+  return {
+    code: 0,
+    raw,
+  };
+}

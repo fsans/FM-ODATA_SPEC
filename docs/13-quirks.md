@@ -149,14 +149,62 @@ Content-Disposition: inline; filename=myphoto.jpg
 
 **Workaround**: For ASCII filenames, use: `Content-Disposition: inline; filename=name.png`. For non-ASCII filenames, use RFC 5987: `Content-Disposition: inline; filename*=UTF-8''<percent-encoded>`. Some clients send both forms; FileMaker accepts either.
 
-## Script result serialization
+## Script result envelope shape
 
-**Behavior**: The `scriptResult` field in script responses is always a string, even when the script returns a number or boolean. The `scriptError` field is also always a string (e.g., `"0"`, `"101"`).
+**Behavior**: The script response uses a nested envelope, not flat string fields. The response is:
 
-**Workaround**: Parse `scriptResult` and `scriptError` explicitly (e.g., `Number(scriptResult)`) rather than relying on type coercion.
+```json
+{
+  "scriptResult": {
+    "code": 0,
+    "resultParameter": "Hello World"
+  }
+}
+```
+
+The `scriptResult` field is an **object** (not a string) containing:
+- `code` (number): Exit Script code (0 = success, non-zero = error)
+- `resultParameter` (string): Text result from the Exit Script step
+
+There is no top-level `scriptError` field — the error code lives inside `scriptResult.code`.
+
+**Workaround**: Parse `scriptResult.code` and `scriptResult.resultParameter` from the nested object. Do not use `String()` on `scriptResult` — it will produce `"[object Object]"`. See [docs/06-scripts.md](06-scripts.md) for the full response specification.
 
 ## URL length limit
 
 **Behavior**: The maximum URL length is influenced by OS, web server, and browser differences. Excessively long URLs (especially with complex `$filter` expressions) may fail.
 
 **Workaround**: Limit URLs to 2,000 characters for cross-platform safety. For very complex filters, consider using batch requests or server-side scripts.
+
+## `$apply` aggregate() parser bug (Claris 2026)
+
+**Behavior**: On FileMaker Server 2026 (v26), the `$apply` parser fails to parse `aggregate(...)` transformation expressions, returning:
+
+```json
+{"error": {"code": "-1002", "message": "Error: parse failure in URL at: ')'"}}
+```
+
+This occurs regardless of URL encoding for parentheses or the specific aggregation function used (`sum`, `countdistinct`, etc.). The `$metadata` document advertises support for both `aggregate` and `groupby` transformations via the `Org.OData.Aggregation.V1.ApplySupportedDefaults` annotation, but only `groupby` works in practice.
+
+**Workaround**: Use `groupby((fields))` without aggregation instead of `aggregate(...)`. For counting records, use `$count=true` instead of `aggregate($count as total)`. This bug may be fixed in a future FMS point release.
+
+## Parentheses must not be percent-encoded in `$apply`
+
+**Behavior**: FileMaker rejects `%28` and `%29` (percent-encoded parentheses) in `$apply` expressions. The `aggregate(...)` and `groupby((...))` syntax requires literal parentheses.
+
+**Workaround**: After URL-encoding query option values, preserve literal `(` and `)` characters. This is analogous to the existing quirk where commas must not be percent-encoded.
+
+```javascript
+// Wrong:  $apply=groupby%28%28first_name%2Clast_name%29%29
+// Right:  $apply=groupby((first_name,last_name))
+```
+
+## Single-field `groupby` may fail on FMS v26
+
+**Behavior**: On FileMaker Server 2026 (v26), `groupby((single_field))` with only one grouping field may fail with:
+
+```json
+{"error": {"code": "8309", "message": "All non-aggregated field references must be in the groupby clause."}}
+```
+
+**Workaround**: Include at least two fields in the `groupby` clause: `groupby((field1, field2))`. If only one grouping dimension is needed, add a second constant or redundant field.

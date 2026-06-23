@@ -217,6 +217,7 @@ GET /<database>/<table>?$filter=<expr>&$select=<fields>&$orderby=<field> desc&$t
 
 - Commas in `$select`, `$orderby`, and `$expand` must **not** be percent-encoded (FileMaker rejects `%2C`).
 - Dollar signs in system query options must **not** be percent-encoded (FileMaker rejects `%24`).
+- Parentheses in `$apply` expressions must **not** be percent-encoded (FileMaker rejects `%28`/`%29`). The `aggregate(...)` and `groupby((...))` syntax requires literal parentheses.
 - Single quotes in string literals must be doubled: `'O''Brien'`.
 - Spaces should be encoded as `%20`, not `+`.
 - See [docs/13-quirks.md](13-quirks.md) for full encoding details.
