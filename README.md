@@ -1,4 +1,4 @@
-# FM-ODATA_SPEC
+# fms-odata-spec
 
 A canonical base reference for the **Claris FileMaker Server OData API**, intended as the single source of truth that downstream libraries (MCP servers, JavaScript wrappers, and any future wrappers) conform to and evolve against.
 
@@ -20,7 +20,7 @@ This repository solves that by providing:
 
 ### Current downstream implementations
 
-Two projects already consume this spec:
+Three projects already consume this spec:
 
 | Project | Type | Repository |
 | ------- | ------ | ---------- |
@@ -54,11 +54,11 @@ The primary deliverable. Read in order — each document builds on the previous:
 
 ### Other contents
 
-```
+```text
 schema/
-  fm-odata-capabilities.json    # Machine-readable capability manifest (version feature matrix)
+  fms-odata-capabilities.json    # Machine-readable capability manifest (version feature matrix)
 packages/
-  fm-odata-spec-ts/             # Shared TypeScript types package (@fm-odata/spec-ts on npm)
+  fms-odata-spec-ts/             # Shared TypeScript types package (@fms-odata/spec-ts on npm)
     src/                        # Endpoint, query, auth, metadata, script, container, batch,
                                # webhook, schema, error, version type definitions
 _research/                      # Gitignored: cloned source repos used as input
@@ -69,7 +69,7 @@ _research/                      # Gitignored: cloned source repos used as input
 The spec covers these FileMaker Server versions, with deltas documented in [docs/12-version-deltas.md](docs/12-version-deltas.md):
 
 | Version | Codename | Status |
-|---------|----------|--------|
+| --------- | ---------- | -------- |
 | FileMaker 19.x | — | Baseline (OData API introduced) |
 | Claris FileMaker 2023 | — | Documented deltas |
 | Claris FileMaker 2024 | — | Documented deltas |
@@ -80,7 +80,7 @@ The spec covers these FileMaker Server versions, with deltas documented in [docs
 
 The spec is built from:
 
-1. **Official Claris OData API documentation** (https://help.claris.com/en/odata-guide/) — primary source.
+1. **Official Claris OData API documentation** (<https://help.claris.com/en/odata-guide/>) — primary source.
 2. **Observed behavior** from the two existing wrapper repositories (`FMS-ODATA-MCP` and `fm-odata-js`) — real-world quirks, workarounds, and undocumented behaviors.
 
 Where official docs and observed behavior diverge, both are documented and the discrepancy is noted.
@@ -88,8 +88,8 @@ Where official docs and observed behavior diverge, both are documented and the d
 ## How downstream libraries use this
 
 - **Read the docs** to understand what the API supports and what it doesn't.
-- **Import the TypeScript types** from `packages/fm-odata-spec-ts` for shared type definitions (endpoint names, query option types, error codes, version feature flags).
-- **Consume the JSON manifest** (`schema/fm-odata-capabilities.json`) to programmatically check feature availability per FileMaker Server version.
+- **Import the TypeScript types** from `packages/fms-odata-spec-ts` for shared type definitions (endpoint names, query option types, error codes, version feature flags).
+- **Consume the JSON manifest** (`schema/fms-odata-capabilities.json`) to programmatically check feature availability per FileMaker Server version.
 - **Follow the reconciliation matrix** (docs/14-reconciliation.md) when aligning divergent implementations.
 
 ## OData protocol version
@@ -117,7 +117,7 @@ This repository uses a Git Flow-style workflow:
 - Tags follow semantic versioning: `vMAJOR.MINOR.PATCH`.
 - Tags are annotated (`git tag -a`) with a summary of what changed.
 - Tags are only created on `main`, never on `develop`.
-- If the `@fm-odata/spec-ts` npm package version changes, the tag version should match the package version.
+- If the `@fms-odata/spec-ts` npm package version changes, the tag version should match the package version.
 
 **Current tags:**
 

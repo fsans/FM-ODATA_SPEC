@@ -176,6 +176,6 @@ Downstream libraries can detect the FileMaker Server version by:
 4. Mapping the major version number (19, 21, 22, 26) to a feature availability matrix.
 5. Returning `null` if no strategy yields a parseable version — tools should proceed with a warning, never a hard error.
 
-The `@fm-odata/spec-ts` package provides `parseServerVersion(metadataXml)` which implements all strategies. Downstream libraries should use it rather than reimplementing the parsing.
+The `@fms-odata/spec-ts` package provides `parseServerVersion(metadataXml)` which implements all strategies. Downstream libraries should use it rather than reimplementing the parsing.
 
 The version should be cached per session and refreshed only when metadata is refreshed.

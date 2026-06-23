@@ -126,7 +126,7 @@ The fluent builder pattern from `fm-odata-js` (`Query<T>`) is more ergonomic and
 
 ### 4. Share URL encoding logic
 
-Both repos implement the same URL encoding quirks (commas, dollar signs, single quotes). This logic should be extracted into a shared module (part of `@fm-odata/spec-ts` or a separate `@fm-odata/shared` package).
+Both repos implement the same URL encoding quirks (commas, dollar signs, single quotes). This logic should be extracted into a shared module (part of `@fms-odata/spec-ts` or a separate `@fms-odata/shared` package).
 
 ### 5. Standardize environment variable names
 
@@ -169,15 +169,15 @@ Both repos should:
 
 Both repos should:
 - Reference this spec in their README and documentation.
-- Import shared types from `@fm-odata/spec-ts`.
-- Consume `schema/fm-odata-capabilities.json` for feature availability checks.
+- Import shared types from `@fms-odata/spec-ts`.
+- Consume `schema/fms-odata-capabilities.json` for feature availability checks.
 - Update their implementations when the spec is updated for new FileMaker Server versions.
 
 ## Migration path
 
 ### Phase 1: Align on types and encoding (low risk)
 
-1. Both repos import `@fm-odata/spec-ts` for shared type definitions.
+1. Both repos import `@fms-odata/spec-ts` for shared type definitions.
 2. Both repos use the shared URL encoding module.
 3. Both repos standardize environment variable names.
 

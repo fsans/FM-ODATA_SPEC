@@ -1,5 +1,5 @@
 {
-  "name": "@fm-odata/spec-ts",
+  "name": "@fms-odata/spec-ts",
   "version": "1.1.0",
   "description": "Shared TypeScript types for the FileMaker OData API specification",
   "type": "module",
@@ -33,12 +33,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/fsans/FM-ODATA_SPEC",
-    "directory": "packages/fm-odata-spec-ts"
+    "url": "https://github.com/fsans/fms-odata-spec",
+    "directory": "packages/fms-odata-spec-ts"
   },
-  "homepage": "https://github.com/fsans/FM-ODATA_SPEC",
+  "homepage": "https://github.com/fsans/fms-odata-spec",
   "bugs": {
-    "url": "https://github.com/fsans/FM-ODATA_SPEC/issues"
+    "url": "https://github.com/fsans/fms-odata-spec/issues"
   },
   "devDependencies": {
     "@types/node": "^26.0.0",
