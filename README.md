@@ -4,21 +4,28 @@ A canonical base reference for the **Claris FileMaker Server OData API**, intend
 
 ## Purpose
 
-Two existing projects had drifted apart in how they implement the FileMaker OData API:
+This project provides a **unified source of conventions and a version-aware capability list** for the Claris FileMaker Server OData API. It serves as a common platform to unify FileMaker OData implementations across different languages, runtimes, and tool ecosystems.
 
-| Project | Type | Repo |
-|---------|------|------|
-| **FMS-ODATA-MCP** | MCP server (TypeScript) | https://github.com/fsans/FMS-ODATA-MCP |
-| **fm-odata-js** | JavaScript wrapper (TypeScript) | https://github.com/fsans/fm-odata-js |
+The Claris OData API has evolved across server versions (19.x, 2023, 2024, 2026) with subtle behavioral differences, undocumented quirks, and version-gated features. Without a shared reference, each wrapper library independently discovers and works around the same issues, leading to divergent implementations and duplicated effort.
 
-This repository exists so that:
+This repository solves that by providing:
 
-1. Both libraries (and any future ones) share a single, documented contract for what the FileMaker OData API does and does not support.
-2. When Claris releases a new FileMaker Server version with OData changes, the update happens **here first**, then propagates to every derived library.
-3. The spec explicitly captures three categories:
+1. **A single, documented contract** for what the FileMaker OData API does and does not support — so every wrapper implements the same behavior instead of guessing.
+2. **A version-aware capability matrix** that maps FileMaker Server versions to supported features, query options, and endpoint availability — so wrappers can detect the server version and gate functionality accordingly.
+3. **A propagation point for API changes** — when Claris releases a new FileMaker Server version, the update happens here first, then flows to every derived library.
+4. **Three explicit categories of coverage**:
    - **Standard OData features** that FileMaker covers.
    - **Standard OData features** that FileMaker explicitly does *not* cover (so wrappers don't try to implement them).
    - **Non-OData additions** specific to FileMaker (containers, scripts, webhooks, custom `Prefer` headers, metadata annotations, system tables, etc.).
+
+### Current downstream implementations
+
+Two projects already consume this spec:
+
+| Project | Type | Repository |
+| ------- | ------ | ---------- |
+| **FMS-ODATA-MCP** | MCP server for AI agents (TypeScript) | <https://github.com/fsans/FMS-ODATA-MCP> |
+| **fm-odata-js** | JavaScript/TypeScript client library | <https://github.com/fsans/fm-odata-js> |
 
 ## What's in this repo
 
