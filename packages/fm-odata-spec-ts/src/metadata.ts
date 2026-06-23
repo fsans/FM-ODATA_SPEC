@@ -106,12 +106,119 @@ export const SYSTEM_TABLES = {
 } as const;
 
 /**
- * Extract the FileMaker Server major version from a product version string.
+ * Parsed FileMaker Server version with major, minor, patch, and raw string.
+ */
+export interface FMServerVersion {
+  major: number;
+  minor: number;
+  patch: number;
+  /** Raw string exactly as found in the XML, e.g. "21.1.2.500" */
+  raw: string;
+}
+
+/**
+ * Extract a three-part semver from a raw version string that may contain a
+ * build number (e.g. "21.1.2.500" -> major=21, minor=1, patch=2).
+ * Returns null if the string doesn't contain a parseable version.
+ */
+export function parseVersionString(raw: string): FMServerVersion | null {
+  const m = raw.trim().match(/(\d+)\.(\d+)\.(\d+)/);
+  if (!m) return null;
+  return {
+    major: parseInt(m[1]!, 10),
+    minor: parseInt(m[2]!, 10),
+    patch: parseInt(m[3]!, 10),
+    raw: raw.trim(),
+  };
+}
+
+/**
+ * Parse the FileMaker Server version from an OData $metadata XML string.
+ *
+ * Detection reads the $metadata XML using 4 strategies in priority order:
+ *
+ * 1a. `<Annotation Term="Org.OData.Core.V1.ProductVersion" String="x.x.x.build"/>`
+ * 1b. Same as 1a but with reversed attribute order (String before Term)
+ * 1c. `<Annotation Term="ServerVersion" String="OData Engine 26.0.1"/>` (FM 26+)
+ * 1d. Same as 1c but with reversed attribute order
+ * 2.  Generic fallback: any annotation whose term contains "Version" and whose
+ *     String value contains a version with major >= 17 (avoids false positives
+ *     from OData spec "4.0")
+ *
+ * Returns null if no strategy yields a parseable version.
+ *
+ * This implementation is aligned with the proven detection logic from
+ * FMS-ODATA-MCP (src/fm-version.ts).
+ */
+export function parseServerVersion(metadataXml: string): FMServerVersion | null {
+  if (!metadataXml || typeof metadataXml !== 'string') return null;
+
+  // Strategy 1a: canonical ProductVersion annotation (String attribute after Term)
+  const annotationMatch = metadataXml.match(
+    /Term\s*=\s*["']Org\.OData\.Core\.V1\.ProductVersion["'][^>]*String\s*=\s*["']([^"']+)["']/,
+  );
+  if (annotationMatch) {
+    const v = parseVersionString(annotationMatch[1]!);
+    if (v) return v;
+  }
+
+  // Strategy 1b: reversed attribute order (String before Term)
+  const annotationMatchRev = metadataXml.match(
+    /String\s*=\s*["']([^"']+)["'][^>]*Term\s*=\s*["']Org\.OData\.Core\.V1\.ProductVersion["']/,
+  );
+  if (annotationMatchRev) {
+    const v = parseVersionString(annotationMatchRev[1]!);
+    if (v) return v;
+  }
+
+  // Strategy 1c: ServerVersion annotation (FM 26+, e.g. "OData Engine 26.0.1")
+  const serverVersionMatch = metadataXml.match(
+    /Term\s*=\s*["']ServerVersion["'][^>]*String\s*=\s*["']([^"']+)["']/i,
+  );
+  if (serverVersionMatch) {
+    const v = parseVersionString(serverVersionMatch[1]!);
+    if (v && v.major >= 17) return v;
+  }
+
+  // Strategy 1d: reversed attribute order for ServerVersion
+  const serverVersionMatchRev = metadataXml.match(
+    /String\s*=\s*["']([^"']+)["'][^>]*Term\s*=\s*["']ServerVersion["']/i,
+  );
+  if (serverVersionMatchRev) {
+    const v = parseVersionString(serverVersionMatchRev[1]!);
+    if (v && v.major >= 17) return v;
+  }
+
+  // Strategy 2: generic fallback — any annotation with "Version" in the term name
+  // and a String value containing a version with major >= 17
+  const genericMatch = metadataXml.match(
+    /Term\s*=\s*["'][^"']*Version[^"']*["'][^>]*String\s*=\s*["'][^"']*?(\d{2,}\.\d+\.\d+(?:\.\d+)?)[^"']*?["']/i,
+  );
+  if (genericMatch) {
+    const v = parseVersionString(genericMatch[1]!);
+    if (v && v.major >= 17) return v;
+  }
+
+  return null;
+}
+
+/**
+ * Extract the FileMaker Server major version string from a product version string.
+ * Convenience wrapper around `parseVersionString`.
  * Returns null if the version cannot be determined.
  */
 export function extractMajorVersion(productVersion: string | undefined): string | null {
   if (!productVersion) return null;
-  // Match patterns like "19.0.1", "21.1.2", "22.0.1", "26.0.0"
-  const match = productVersion.match(/^(\d+)\./);
-  return match ? match[1] : null;
+  const v = parseVersionString(productVersion);
+  return v ? String(v.major) : null;
+}
+
+/**
+ * Extract the FileMaker Server major version from a $metadata XML string.
+ * Uses `parseServerVersion` internally and returns just the major version number
+ * as a string, or null if the version cannot be determined.
+ */
+export function extractMajorVersionFromMetadata(metadataXml: string): string | null {
+  const v = parseServerVersion(metadataXml);
+  return v ? String(v.major) : null;
 }

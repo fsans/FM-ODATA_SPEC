@@ -160,9 +160,16 @@ These are not confirmed and should not be relied upon.
 Downstream libraries can detect the FileMaker Server version by:
 
 1. Fetching `$metadata`.
-2. Parsing the `Org.OData.Core.V1.ProductVersion` annotation (all versions).
-3. Parsing the `ServerVersion` annotation (Claris 2026+).
-4. Extracting the major version number (19, 21, 22, 26).
-5. Mapping to a feature availability matrix (see above).
+2. Parsing the version from the XML using a multi-strategy approach (see `docs/05-metadata.md` for full details):
+   - **1a**: `Org.OData.Core.V1.ProductVersion` annotation with `String` attribute (all versions)
+   - **1b**: Same as 1a but with reversed attribute order (`String` before `Term`)
+   - **1c**: `ServerVersion` annotation (Claris 2026+, e.g. `"OData Engine 26.0.1"`)
+   - **1d**: Same as 1c but with reversed attribute order
+   - **2**: Generic fallback — any annotation term containing "Version" with a value >= 17
+3. Extracting `major.minor.patch` from the version string (ignoring build suffix, e.g. `"21.1.2.500"` -> `21.1.2`).
+4. Mapping the major version number (19, 21, 22, 26) to a feature availability matrix.
+5. Returning `null` if no strategy yields a parseable version — tools should proceed with a warning, never a hard error.
+
+The `@fm-odata/spec-ts` package provides `parseServerVersion(metadataXml)` which implements all strategies. Downstream libraries should use it rather than reimplementing the parsing.
 
 The version should be cached per session and refreshed only when metadata is refreshed.

@@ -54,11 +54,38 @@ Present with value `true` if the condition holds; absent (or `false`) otherwise.
 
 ### Product version annotation
 
-The metadata includes the FileMaker product version number via:
-- `Org.OData.Core.V1.ProductVersion` annotation
-- `ServerVersion` annotation (Claris 2026+)
+The metadata includes the FileMaker product version number via one or more XML annotations. Downstream libraries should parse these using a multi-strategy approach, as the exact format varies across FileMaker Server versions and XML serializers:
 
-This can be used to detect the FileMaker Server version and gate feature availability.
+**Strategy 1a — Canonical ProductVersion annotation (all versions):**
+```xml
+<Annotation Term="Org.OData.Core.V1.ProductVersion" String="21.1.2.500"/>
+```
+
+**Strategy 1b — Reversed attribute order:**
+Some XML serializers emit `String` before `Term`:
+```xml
+<Annotation String="21.1.2.500" Term="Org.OData.Core.V1.ProductVersion"/>
+```
+
+**Strategy 1c — ServerVersion annotation (Claris 2026+):**
+FM 26+ adds a separate annotation with a descriptive prefix:
+```xml
+<Annotation Term="ServerVersion" String="OData Engine 26.0.1"/>
+```
+
+**Strategy 1d — ServerVersion with reversed attribute order:**
+```xml
+<Annotation String="OData Engine 26.0.1" Term="ServerVersion"/>
+```
+
+**Strategy 2 — Generic fallback:**
+If none of the above match, look for any annotation whose term name contains "Version" and whose String value contains a version number with major >= 17 (the threshold avoids false positives from the OData spec version "4.0" in the `edmx:Edmx` root element).
+
+**Version string format:**
+The version string may include a build number suffix (e.g. `"21.1.2.500"`). Parse the first three numeric segments as `major.minor.patch` and ignore the rest.
+
+**Implementation reference:**
+The `@fm-odata/spec-ts` package provides `parseServerVersion(metadataXml)` which implements all 4 strategies plus the generic fallback, returning an `FMServerVersion` object `{ major, minor, patch, raw }`. Downstream libraries should use this function rather than reimplementing the parsing logic.
 
 ## Value lists in metadata
 
