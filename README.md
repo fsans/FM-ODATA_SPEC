@@ -22,30 +22,38 @@ This repository exists so that:
 
 ## What's in this repo
 
+### Specification documents (`docs/`)
+
+The primary deliverable. Read in order — each document builds on the previous:
+
+| # | Document | Description |
+| --- | ---------- | ------------- |
+| 00 | [Overview](docs/00-overview.md) | Scope, purpose, version targeting |
+| 01 | [Conformance](docs/01-conformance.md) | OData standard coverage matrix — what FMS supports and what it doesn't |
+| 02 | [Endpoints](docs/02-endpoints.md) | Full endpoint reference (URL patterns, methods, status codes) |
+| 03 | [Query Options](docs/03-query-options.md) | `$filter`, `$select`, `$orderby`, `$top`, `$skip`, `$expand`, `$count`, `$apply` |
+| 04 | [Authentication](docs/04-authentication.md) | Basic auth, Claris ID (FMID), OAuth |
+| 05 | [Metadata](docs/05-metadata.md) | `$metadata` document, annotations, system tables, version detection |
+| 06 | [Scripts](docs/06-scripts.md) | Script execution, scopes, parameters, results |
+| 07 | [Containers](docs/07-containers.md) | Container field binary/base64 upload and download |
+| 08 | [Batch](docs/08-batch.md) | `$batch` requests, changesets, FMS quirks |
+| 09 | [Webhooks](docs/09-webhooks.md) | Webhook creation and management |
+| 10 | [Schema Modification](docs/10-schema-modification.md) | DDL: create/delete tables, fields, indexes |
+| 11 | [Non-OData Additions](docs/11-non-odata-additions.md) | FileMaker-specific extensions beyond the OData standard |
+| 12 | [Version Deltas](docs/12-version-deltas.md) | 19.x → 2023 → 2024 → 2026 → future, feature comparison matrix |
+| 13 | [Quirks](docs/13-quirks.md) | Real-world quirks, bugs, and workarounds |
+| 14 | [Reconciliation](docs/14-reconciliation.md) | Divergence matrix between the two downstream repos |
+
+### Other contents
+
 ```
-FM-ODATA_SPEC/
-├── docs/                          # Human-readable spec (the primary deliverable)
-│   ├── 00-overview.md             # Scope, purpose, version targeting
-│   ├── 01-conformance.md          # OData standard coverage matrix
-│   ├── 02-endpoints.md            # Full endpoint reference
-│   ├── 03-query-options.md        # $filter, $select, $orderby, $top, $skip, $expand, $count, $apply
-│   ├── 04-authentication.md       # Basic auth, Claris ID (FMID), OAuth
-│   ├── 05-metadata.md             # $metadata, annotations, system tables, IDs
-│   ├── 06-scripts.md              # Script execution, scopes, parameters, results
-│   ├── 07-containers.md           # Container field binary/base64 upload/download
-│   ├── 08-batch.md                # $batch requests, changesets, FMS quirks
-│   ├── 09-webhooks.md             # Webhook creation/management
-│   ├── 10-schema-modification.md  # DDL: create/delete tables, fields, indexes
-│   ├── 11-non-odata-additions.md  # FileMaker-specific extensions
-│   ├── 12-version-deltas.md       # 19.x -> 2023 -> 2024 -> 2026 -> future
-│   ├── 13-quirks.md               # Real-world quirks & workarounds
-│   └── 14-reconciliation.md       # Divergence matrix between the two existing repos
-├── schema/
-│   └── fm-odata-capabilities.json # Machine-readable capability manifest
-├── packages/
-│   └── fm-odata-spec-ts/          # Shared TypeScript types package
-│       └── src/                   # Endpoint, query, auth, metadata, script, container, batch, webhook, schema, error, version types
-└── _research/                     # Gitignored: cloned source repos used as input
+schema/
+  fm-odata-capabilities.json    # Machine-readable capability manifest (version feature matrix)
+packages/
+  fm-odata-spec-ts/             # Shared TypeScript types package (@fm-odata/spec-ts on npm)
+    src/                        # Endpoint, query, auth, metadata, script, container, batch,
+                               # webhook, schema, error, version type definitions
+_research/                      # Gitignored: cloned source repos used as input
 ```
 
 ## Version targeting
