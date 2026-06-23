@@ -4,48 +4,63 @@ A canonical base reference for the **Claris FileMaker Server OData API**, intend
 
 ## Purpose
 
-Two existing projects had drifted apart in how they implement the FileMaker OData API:
+This project provides a **unified source of conventions and a version-aware capability list** for the Claris FileMaker Server OData API. It serves as a common platform to unify FileMaker OData implementations across different languages, runtimes, and tool ecosystems.
 
-| Project | Type | Repo |
-|---------|------|------|
-| **FMS-ODATA-MCP** | MCP server (TypeScript) | https://github.com/fsans/FMS-ODATA-MCP |
-| **fm-odata-js** | JavaScript wrapper (TypeScript) | https://github.com/fsans/fm-odata-js |
+The Claris OData API has evolved across server versions (19.x, 2023, 2024, 2026) with subtle behavioral differences, undocumented quirks, and version-gated features. Without a shared reference, each wrapper library independently discovers and works around the same issues, leading to divergent implementations and duplicated effort.
 
-This repository exists so that:
+This repository solves that by providing:
 
-1. Both libraries (and any future ones) share a single, documented contract for what the FileMaker OData API does and does not support.
-2. When Claris releases a new FileMaker Server version with OData changes, the update happens **here first**, then propagates to every derived library.
-3. The spec explicitly captures three categories:
+1. **A single, documented contract** for what the FileMaker OData API does and does not support — so every wrapper implements the same behavior instead of guessing.
+2. **A version-aware capability matrix** that maps FileMaker Server versions to supported features, query options, and endpoint availability — so wrappers can detect the server version and gate functionality accordingly.
+3. **A propagation point for API changes** — when Claris releases a new FileMaker Server version, the update happens here first, then flows to every derived library.
+4. **Three explicit categories of coverage**:
    - **Standard OData features** that FileMaker covers.
    - **Standard OData features** that FileMaker explicitly does *not* cover (so wrappers don't try to implement them).
    - **Non-OData additions** specific to FileMaker (containers, scripts, webhooks, custom `Prefer` headers, metadata annotations, system tables, etc.).
 
+### Current downstream implementations
+
+Two projects already consume this spec:
+
+| Project | Type | Repository |
+| ------- | ------ | ---------- |
+| **FMS-ODATA-MCP** | MCP server for AI agents (TypeScript) | <https://github.com/fsans/FMS-ODATA-MCP> |
+| **fm-odata-js** | JavaScript/TypeScript client library | <https://github.com/fsans/fm-odata-js> |
+
 ## What's in this repo
 
+### Specification documents (`docs/`)
+
+The primary deliverable. Read in order — each document builds on the previous:
+
+| # | Document | Description |
+| --- | ---------- | ------------- |
+| 00 | [Overview](docs/00-overview.md) | Scope, purpose, version targeting |
+| 01 | [Conformance](docs/01-conformance.md) | OData standard coverage matrix — what FMS supports and what it doesn't |
+| 02 | [Endpoints](docs/02-endpoints.md) | Full endpoint reference (URL patterns, methods, status codes) |
+| 03 | [Query Options](docs/03-query-options.md) | `$filter`, `$select`, `$orderby`, `$top`, `$skip`, `$expand`, `$count`, `$apply` |
+| 04 | [Authentication](docs/04-authentication.md) | Basic auth, Claris ID (FMID), OAuth |
+| 05 | [Metadata](docs/05-metadata.md) | `$metadata` document, annotations, system tables, version detection |
+| 06 | [Scripts](docs/06-scripts.md) | Script execution, scopes, parameters, results |
+| 07 | [Containers](docs/07-containers.md) | Container field binary/base64 upload and download |
+| 08 | [Batch](docs/08-batch.md) | `$batch` requests, changesets, FMS quirks |
+| 09 | [Webhooks](docs/09-webhooks.md) | Webhook creation and management |
+| 10 | [Schema Modification](docs/10-schema-modification.md) | DDL: create/delete tables, fields, indexes |
+| 11 | [Non-OData Additions](docs/11-non-odata-additions.md) | FileMaker-specific extensions beyond the OData standard |
+| 12 | [Version Deltas](docs/12-version-deltas.md) | 19.x → 2023 → 2024 → 2026 → future, feature comparison matrix |
+| 13 | [Quirks](docs/13-quirks.md) | Real-world quirks, bugs, and workarounds |
+| 14 | [Reconciliation](docs/14-reconciliation.md) | Divergence matrix between the two downstream repos |
+
+### Other contents
+
 ```
-FM-ODATA_SPEC/
-├── docs/                          # Human-readable spec (the primary deliverable)
-│   ├── 00-overview.md             # Scope, purpose, version targeting
-│   ├── 01-conformance.md          # OData standard coverage matrix
-│   ├── 02-endpoints.md            # Full endpoint reference
-│   ├── 03-query-options.md        # $filter, $select, $orderby, $top, $skip, $expand, $count, $apply
-│   ├── 04-authentication.md       # Basic auth, Claris ID (FMID), OAuth
-│   ├── 05-metadata.md             # $metadata, annotations, system tables, IDs
-│   ├── 06-scripts.md              # Script execution, scopes, parameters, results
-│   ├── 07-containers.md           # Container field binary/base64 upload/download
-│   ├── 08-batch.md                # $batch requests, changesets, FMS quirks
-│   ├── 09-webhooks.md             # Webhook creation/management
-│   ├── 10-schema-modification.md  # DDL: create/delete tables, fields, indexes
-│   ├── 11-non-odata-additions.md  # FileMaker-specific extensions
-│   ├── 12-version-deltas.md       # 19.x -> 2023 -> 2024 -> 2026 -> future
-│   ├── 13-quirks.md               # Real-world quirks & workarounds
-│   └── 14-reconciliation.md       # Divergence matrix between the two existing repos
-├── schema/
-│   └── fm-odata-capabilities.json # Machine-readable capability manifest
-├── packages/
-│   └── fm-odata-spec-ts/          # Shared TypeScript types package
-│       └── src/                   # Endpoint, query, auth, metadata, script, container, batch, webhook, schema, error, version types
-└── _research/                     # Gitignored: cloned source repos used as input
+schema/
+  fm-odata-capabilities.json    # Machine-readable capability manifest (version feature matrix)
+packages/
+  fm-odata-spec-ts/             # Shared TypeScript types package (@fm-odata/spec-ts on npm)
+    src/                        # Endpoint, query, auth, metadata, script, container, batch,
+                               # webhook, schema, error, version type definitions
+_research/                      # Gitignored: cloned source repos used as input
 ```
 
 ## Version targeting
@@ -79,6 +94,37 @@ Where official docs and observed behavior diverge, both are documented and the d
 ## OData protocol version
 
 FileMaker Server and FileMaker Cloud implement **OData 4.0** (advertised via `OData-Version: 4.0` and `OData-MaxVersion: 4.0` headers). The official docs reference the OData 4.01 specification for protocol conventions, but the implemented protocol version is 4.0. See [docs/01-conformance.md](docs/01-conformance.md) for the full conformance level and feature support matrix.
+
+## Branching model
+
+This repository uses a Git Flow-style workflow:
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Stable releases only. Every commit on `main` is a merge from `develop` and is tagged with a version tag (`v1.0.0`, `v1.1.0`, etc.). |
+| `develop` | Active development. All work lands here first via direct commits or feature branches merged back. |
+
+**Workflow:**
+
+1. Work on `develop` (or a feature branch off `develop`).
+2. When a set of changes is ready for release, merge `develop` into `main`.
+3. Tag the merge commit on `main` with an annotated version tag (`vMAJOR.MINOR.PATCH`).
+4. Push both branches and the tag to `origin`.
+
+**Tagging convention:**
+
+- Tags follow semantic versioning: `vMAJOR.MINOR.PATCH`.
+- Tags are annotated (`git tag -a`) with a summary of what changed.
+- Tags are only created on `main`, never on `develop`.
+- If the `@fm-odata/spec-ts` npm package version changes, the tag version should match the package version.
+
+**Current tags:**
+
+| Tag | Commit | Description |
+|-----|--------|-------------|
+| `v1.0.0` | `a8c7d9a` | Initial spec: 15 docs, JSON manifest, spec-ts types package |
+| `v1.1.0` | `307389f` | Multi-strategy version detection aligned with FMS-ODATA-MCP |
+| `v1.1.1` | `b3b23ba` | Script result envelope fix + FMS v26 quirks |
 
 ## License
 
