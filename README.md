@@ -26,6 +26,7 @@ Two projects already consume this spec:
 | ------- | ------ | ---------- |
 | **FMS-ODATA-MCP** | MCP server for AI agents (TypeScript) | <https://github.com/fsans/FMS-ODATA-MCP> |
 | **fm-odata-js** | JavaScript/TypeScript client library | <https://github.com/fsans/fm-odata-js> |
+| **FMS-odata-webhooks** | Webhook handler for FileMaker OData events | <https://github.com/fsans/FMS-odata-webhooks> |
 
 ## What's in this repo
 
