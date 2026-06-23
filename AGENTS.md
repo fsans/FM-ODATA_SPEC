@@ -19,6 +19,25 @@ This is a **specification repository**, not a runnable application. It contains:
 - **OData protocol version**: FileMaker implements OData 4.0, not 4.01. The 4.01 spec is referenced for conventions only.
 - **URL pattern**: `https://host/fmi/odata/v4/<database>/<resource>` — version segment is always `v4`.
 
+## Branching model (Git Flow)
+
+- **`main`**: Stable releases only. Every commit is a merge from `develop` and is tagged with an annotated version tag.
+- **`develop`**: Active development branch. All work lands here first.
+- Feature branches (optional): branch off `develop`, merge back into `develop`.
+
+**When making changes:**
+
+1. Commit work to `develop`.
+2. When ready for release, merge `develop` into `main` (fast-forward or merge commit).
+3. Tag the release on `main` with an annotated tag: `git tag -a vMAJOR.MINOR.PATCH -m "..."`.
+4. Push everything: `git push origin develop main --tags`.
+
+**Tag rules:**
+- Semantic versioning: `vMAJOR.MINOR.PATCH`.
+- Annotated tags only (`git tag -a`), never lightweight tags.
+- Tags only on `main`, never on `develop`.
+- If `@fm-odata/spec-ts` package version changes, the tag must match it.
+
 ## When updating the spec for a new FileMaker Server release
 
 1. Read the official Claris OData docs for the new version.

@@ -80,6 +80,37 @@ Where official docs and observed behavior diverge, both are documented and the d
 
 FileMaker Server and FileMaker Cloud implement **OData 4.0** (advertised via `OData-Version: 4.0` and `OData-MaxVersion: 4.0` headers). The official docs reference the OData 4.01 specification for protocol conventions, but the implemented protocol version is 4.0. See [docs/01-conformance.md](docs/01-conformance.md) for the full conformance level and feature support matrix.
 
+## Branching model
+
+This repository uses a Git Flow-style workflow:
+
+| Branch | Purpose |
+|--------|---------|
+| `main` | Stable releases only. Every commit on `main` is a merge from `develop` and is tagged with a version tag (`v1.0.0`, `v1.1.0`, etc.). |
+| `develop` | Active development. All work lands here first via direct commits or feature branches merged back. |
+
+**Workflow:**
+
+1. Work on `develop` (or a feature branch off `develop`).
+2. When a set of changes is ready for release, merge `develop` into `main`.
+3. Tag the merge commit on `main` with an annotated version tag (`vMAJOR.MINOR.PATCH`).
+4. Push both branches and the tag to `origin`.
+
+**Tagging convention:**
+
+- Tags follow semantic versioning: `vMAJOR.MINOR.PATCH`.
+- Tags are annotated (`git tag -a`) with a summary of what changed.
+- Tags are only created on `main`, never on `develop`.
+- If the `@fm-odata/spec-ts` npm package version changes, the tag version should match the package version.
+
+**Current tags:**
+
+| Tag | Commit | Description |
+|-----|--------|-------------|
+| `v1.0.0` | `a8c7d9a` | Initial spec: 15 docs, JSON manifest, spec-ts types package |
+| `v1.1.0` | `307389f` | Multi-strategy version detection aligned with FMS-ODATA-MCP |
+| `v1.1.1` | `b3b23ba` | Script result envelope fix + FMS v26 quirks |
+
 ## License
 
 MIT — see [LICENSE](LICENSE).
