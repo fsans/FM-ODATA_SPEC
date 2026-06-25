@@ -24,9 +24,9 @@ Three projects already consume this spec:
 
 | Project | Type | Repository |
 | ------- | ------ | ---------- |
-| **FMS-ODATA-MCP** | MCP server for AI agents (TypeScript) | <https://github.com/fsans/FMS-ODATA-MCP> |
-| **fm-odata-js** | JavaScript/TypeScript client library | <https://github.com/fsans/fm-odata-js> |
-| **FMS-odata-webhooks** | Webhook handler for FileMaker OData events | <https://github.com/fsans/FMS-odata-webhooks> |
+| **fms-odata-mcp** | MCP server for AI agents (TypeScript) | <https://github.com/fsans/fms-odata-mcp> |
+| **fms-odata-js** | JavaScript/TypeScript client library | <https://github.com/fsans/fms-odata-js> |
+| **fms-odata-webhooks** | Webhook handler for FileMaker OData events | <https://github.com/fsans/fms-odata-webhooks> |
 
 ## What's in this repo
 
@@ -81,7 +81,7 @@ The spec covers these FileMaker Server versions, with deltas documented in [docs
 The spec is built from:
 
 1. **Official Claris OData API documentation** (<https://help.claris.com/en/odata-guide/>) — primary source.
-2. **Observed behavior** from the two existing wrapper repositories (`FMS-ODATA-MCP` and `fm-odata-js`) — real-world quirks, workarounds, and undocumented behaviors.
+2. **Observed behavior** from the two existing wrapper repositories (`fms-odata-mcp` and `fms-odata-js`) — real-world quirks, workarounds, and undocumented behaviors.
 
 Where official docs and observed behavior diverge, both are documented and the discrepancy is noted.
 
@@ -124,7 +124,7 @@ This repository uses a Git Flow-style workflow:
 | Tag | Commit | Description |
 |-----|--------|-------------|
 | `v1.0.0` | `a8c7d9a` | Initial spec: 15 docs, JSON manifest, spec-ts types package |
-| `v1.1.0` | `307389f` | Multi-strategy version detection aligned with FMS-ODATA-MCP |
+| `v1.1.0` | `307389f` | Multi-strategy version detection aligned with fms-odata-mcp |
 | `v1.1.1` | `b3b23ba` | Script result envelope fix + FMS v26 quirks |
 | `v1.2.0` | `b72ab04` | Complete fm-odata -> fms-odata rename (package, directory, schema, all references) |
 
