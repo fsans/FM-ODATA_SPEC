@@ -148,7 +148,7 @@ export function parseVersionString(raw: string): FMServerVersion | null {
  * Returns null if no strategy yields a parseable version.
  *
  * This implementation is aligned with the proven detection logic from
- * FMS-ODATA-MCP (src/fm-version.ts).
+ * fms-odata-mcp (src/fm-version.ts).
  */
 export function parseServerVersion(metadataXml: string): FMServerVersion | null {
   if (!metadataXml || typeof metadataXml !== 'string') return null;

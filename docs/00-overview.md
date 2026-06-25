@@ -10,8 +10,8 @@ It is not a tutorial, not a wrapper library, and not a runnable application. It 
 
 Two existing wrapper projects had drifted apart in how they implement the same API:
 
-- **FMS-ODATA-MCP** — a TypeScript MCP server exposing FileMaker OData as tools for AI agents.
-- **fm-odata-js** — a lightweight TypeScript client library for browsers, Node, and the FileMaker Web Viewer.
+- **fms-odata-mcp** — a TypeScript MCP server exposing FileMaker OData as tools for AI agents.
+- **fms-odata-js** — a lightweight TypeScript client library for browsers, Node, and the FileMaker Web Viewer.
 
 Both target the same FileMaker OData API, but they diverged in naming conventions, feature coverage, parameter handling, error models, and URL encoding. This spec provides a single source of truth so that:
 
@@ -110,4 +110,4 @@ The docs are numbered for reading order:
 
 - **Primary**: [Claris FileMaker OData API Guide](https://help.claris.com/en/odata-guide/content/index.html)
 - **OData reference**: [OData 4.01 Protocol](http://docs.oasis-open.org/odata/odata/v4.01/os/part1-protocol/odata-v4.01-os-part1-protocol.html), [URL Conventions](https://docs.oasis-open.org/odata/odata/v4.01/odata-v4.01-part2-url-conventions.html), [CSDL](https://docs.oasis-open.org/odata/odata/v4.01/csprd01/part3-csdl/odata-v4.01-csprd01-part3-csdl.html), [JSON Format](https://docs.oasis-open.org/odata/odata-json-format/v4.01/odata-json-format-v4.01.html)
-- **Observed behavior**: FMS-ODATA-MCP and fm-odata-js repositories (see docs/14-reconciliation.md).
+- **Observed behavior**: fms-odata-mcp and fms-odata-js repositories (see docs/14-reconciliation.md).

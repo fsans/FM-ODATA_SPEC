@@ -6,12 +6,12 @@ This document maps the divergence between the two existing wrapper repositories 
 
 | Repository | Type | Language | Package | Version analyzed |
 |------------|------|----------|---------|------------------|
-| [FMS-ODATA-MCP](https://github.com/fsans/FMS-ODATA-MCP) | MCP server | TypeScript | `filemaker-odata-mcp` | 0.8.2 |
-| [fm-odata-js](https://github.com/fsans/fm-odata-js) | JS wrapper | TypeScript | `fm-odata-js` | 0.1.6 |
+| [fms-odata-mcp](https://github.com/fsans/fms-odata-mcp) | MCP server | TypeScript | `filemaker-odata-mcp` | 0.8.2 |
+| [fms-odata-js](https://github.com/fsans/fms-odata-js) | JS wrapper | TypeScript | `fms-odata-js` | 0.1.6 |
 
 ## Architectural comparison
 
-| Aspect | FMS-ODATA-MCP | fm-odata-js |
+| Aspect | fms-odata-mcp | fms-odata-js |
 |--------|---------------|-------------|
 | Purpose | MCP server for AI agents | Direct client library |
 | Deployment | Standalone service (stdio/http/https) | Embedded in application |
@@ -26,7 +26,7 @@ This document maps the divergence between the two existing wrapper repositories 
 
 ## Naming comparison
 
-| Concept | FMS-ODATA-MCP | fm-odata-js | Spec recommendation |
+| Concept | fms-odata-mcp | fms-odata-js | Spec recommendation |
 |---------|---------------|-------------|---------------------|
 | Main client class | `ODataClient` | `FMOData` | `FMOData` |
 | Query builder | Tool parameters (string-based) | `Query<T>` (fluent) | Fluent builder |
@@ -40,7 +40,7 @@ This document maps the divergence between the two existing wrapper repositories 
 
 ## Feature coverage matrix
 
-| Feature | FMS-ODATA-MCP | fm-odata-js | Spec requires |
+| Feature | fms-odata-mcp | fms-odata-js | Spec requires |
 |---------|---------------|-------------|---------------|
 | Query records | Yes | Yes | Yes |
 | Get single record | Yes | Yes | Yes |
@@ -82,7 +82,7 @@ This document maps the divergence between the two existing wrapper repositories 
 
 ## Gap analysis
 
-### Gaps in FMS-ODATA-MCP (vs spec)
+### Gaps in fms-odata-mcp (vs spec)
 
 | Missing feature | Priority | Notes |
 |-----------------|----------|-------|
@@ -94,7 +94,7 @@ This document maps the divergence between the two existing wrapper repositories 
 | 401 retry / token refresh | Medium | Important for FileMaker Cloud token expiry |
 | Webhooks | Low | Niche feature; can add as MCP tools |
 
-### Gaps in fm-odata-js (vs spec)
+### Gaps in fms-odata-js (vs spec)
 
 | Missing feature | Priority | Notes |
 |-----------------|----------|-------|
@@ -118,11 +118,11 @@ Both repos should use `FMOData` as the primary class name. It's concise, signals
 
 ### 2. Adopt fluent builder pattern for queries
 
-The fluent builder pattern from `fm-odata-js` (`Query<T>`) is more ergonomic and type-safe than string-based parameters. The MCP server can internally use a fluent builder and serialize to URL strings for transport.
+The fluent builder pattern from `fms-odata-js` (`Query<T>`) is more ergonomic and type-safe than string-based parameters. The MCP server can internally use a fluent builder and serialize to URL strings for transport.
 
 ### 3. Adopt typed exceptions for errors
 
-`FMODataError` and `FMScriptError` from `fm-odata-js` should be the canonical error types. The MCP server can catch these and convert to MCP content arrays for transport, while internally using typed exceptions.
+`FMODataError` and `FMScriptError` from `fms-odata-js` should be the canonical error types. The MCP server can catch these and convert to MCP content arrays for transport, while internally using typed exceptions.
 
 ### 4. Share URL encoding logic
 
@@ -141,13 +141,13 @@ Both repos implement the same URL encoding quirks (commas, dollar signs, single 
 
 ### 6. Expose container I/O in both repos
 
-- **fm-odata-js**: Already has `ContainerRef` — no change needed.
-- **FMS-ODATA-MCP**: Add `fm_odata_container_upload` and `fm_odata_container_download` tools using the base64 method (binary is not suitable for JSON-RPC transport).
+- **fms-odata-js**: Already has `ContainerRef` — no change needed.
+- **fms-odata-mcp**: Add `fm_odata_container_upload` and `fm_odata_container_download` tools using the base64 method (binary is not suitable for JSON-RPC transport).
 
 ### 7. Expose batch operations in both repos
 
-- **fm-odata-js**: Already has `Batch` / `Changeset` — no change needed.
-- **FMS-ODATA-MCP**: Add `fm_odata_batch` tool that accepts a JSON array of operations and constructs the multipart MIME internally.
+- **fms-odata-js**: Already has `Batch` / `Changeset` — no change needed.
+- **fms-odata-mcp**: Add `fm_odata_batch` tool that accepts a JSON array of operations and constructs the multipart MIME internally.
 
 ### 8. Standardize version detection
 
@@ -183,16 +183,16 @@ Both repos should:
 
 ### Phase 2: Align on API surface (medium risk)
 
-1. fm-odata-js adopts `FMOData` class name (if not already).
-2. FMS-ODATA-MCP adds container I/O (base64) and batch tools.
-3. fm-odata-js adds version detection and feature gating.
+1. fms-odata-js adopts `FMOData` class name (if not already).
+2. fms-odata-mcp adds container I/O (base64) and batch tools.
+3. fms-odata-js adds version detection and feature gating.
 4. Both repos adopt typed exceptions internally.
 
 ### Phase 3: Align on advanced features (higher risk)
 
-1. fm-odata-js adds `$apply` aggregation support.
-2. fm-odata-js adds FMSID-based script invocation.
-3. FMS-ODATA-MCP adds FMID auth support.
+1. fms-odata-js adds `$apply` aggregation support.
+2. fms-odata-js adds FMSID-based script invocation.
+3. fms-odata-mcp adds FMID auth support.
 4. Both repos add record references (`$ref`) and cross-join support.
 
 ### Phase 4: Ongoing sync
