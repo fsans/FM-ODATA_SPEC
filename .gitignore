@@ -8,6 +8,19 @@ node_modules/
 dist/
 *.tsbuildinfo
 
+# Python build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
 # Editor / OS
 .DS_Store
 .vscode/
