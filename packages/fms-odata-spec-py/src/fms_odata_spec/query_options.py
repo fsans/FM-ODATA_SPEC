@@ -213,7 +213,7 @@ def format_literal(value: Union[str, int, float, bool, datetime]) -> str:
             # trailing '+'/'-'/'Z' portion of that.
             frac_and_tz = _rest
             tz = ""
-            for sep in ("+", "Z"):
+            for sep in ("+", "-", "Z"):
                 idx = frac_and_tz.find(sep)
                 if idx != -1:
                     tz = frac_and_tz[idx:]

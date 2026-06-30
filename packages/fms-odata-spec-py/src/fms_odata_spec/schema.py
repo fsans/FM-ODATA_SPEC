@@ -155,7 +155,7 @@ def parse_field_type(type_str: str) -> ParsedFieldType:
     """
     length_match = _LENGTH_RE.search(type_str)
     rep_match = _REP_RE.search(type_str)
-    base_type = _STRIP_REP_RE.sub("", _STRIP_LENGTH_RE.sub("", type_str)).strip()
+    base_type = _STRIP_REP_RE.sub("", _STRIP_LENGTH_RE.sub("", type_str, count=1), count=1).strip()
     return ParsedFieldType(
         base_type=base_type,
         length=int(length_match.group(1)) if length_match else None,

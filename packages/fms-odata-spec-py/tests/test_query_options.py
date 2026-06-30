@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -148,3 +148,13 @@ def test_query_result_constructs() -> None:
     assert r.value == [1, 2]
     assert r.count == 2
     assert r.next_link == "link"
+
+
+def test_format_literal_datetime_negative_tz_with_micros() -> None:
+    dt = datetime(2026, 6, 30, 12, 34, 56, 789000, tzinfo=timezone(timedelta(hours=-5)))
+    assert format_literal(dt) == "2026-06-30T12:34:56-05:00"
+
+
+def test_format_literal_datetime_negative_tz_no_micros() -> None:
+    dt = datetime(2026, 6, 30, 12, 34, 56, tzinfo=timezone(timedelta(hours=-5)))
+    assert format_literal(dt) == "2026-06-30T12:34:56-05:00"

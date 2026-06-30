@@ -106,3 +106,10 @@ def test_script_options_defaults() -> None:
     o = ScriptOptions()
     assert o.parameter is None
     assert o.cancel_event is None
+
+
+def test_parse_script_response_non_numeric_code_defaults_zero() -> None:
+    raw = {"scriptResult": {"code": "N/A", "resultParameter": "x"}}
+    r = parse_script_response(raw)
+    assert r.code == 0
+    assert r.result_parameter == "x"

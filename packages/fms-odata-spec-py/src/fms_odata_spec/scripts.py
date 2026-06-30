@@ -151,8 +151,12 @@ def parse_script_response(raw: Any) -> ScriptResult:
         nested = script_result
         code = nested.get("code")
         result_parameter = nested.get("resultParameter")
+        try:
+            parsed_code = int(code) if code is not None else 0
+        except (ValueError, TypeError):
+            parsed_code = 0
         return ScriptResult(
-            code=int(code) if code is not None else 0,
+            code=parsed_code,
             result_parameter=(
                 str(result_parameter) if result_parameter is not None else None
             ),

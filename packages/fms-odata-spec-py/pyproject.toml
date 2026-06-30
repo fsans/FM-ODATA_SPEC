@@ -43,6 +43,7 @@ Issues = "https://github.com/fsans/fms-odata-spec/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/fms_odata_spec"]
+artifacts = ["LICENSE"]
 
 [tool.hatch.build.targets.sdist]
 include = [
