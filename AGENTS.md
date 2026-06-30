@@ -89,13 +89,23 @@ python -m build                  # sdist + wheel into dist/
 > addressed before publishing `fms-odata-spec` 0.1.0 to PyPI. Do NOT silently
 > drop them; either complete them or explicitly move them to a later milestone.
 
-1. **PyPI publishing workflow** — `.github/workflows/py-ci.yml` runs tests and
-   `python -m build` but does NOT publish. Add a publish job (or separate
-   workflow) using `twine upload`, gated on a `PYPI_API_TOKEN` repository
-   secret, triggered on tag pushes matching the Python package version. The
-   Python package is versioned independently of the TS package and of git tags
-   on `main`; decide on a tag scheme (e.g. `py-v0.1.0`) to avoid collision with
-   the existing `vMAJOR.MINOR.PATCH` TS tags.
+1. **PyPI publishing workflow** — `.github/workflows/py-publish.yml` exists
+   and triggers on `py-v*` tag pushes, runs tests, builds, and uploads to PyPI
+   via `twine upload` using a `PYPI_API_TOKEN` repository secret. **Remaining
+   steps to enable it:**
+   - Create a PyPI API token at https://pypi.org/manage/account/token/ (the
+     first upload creates the `fms-odata-spec` project; an account-scoped token
+     works for the first upload, a project-scoped token afterwards).
+   - Add it as the GitHub repository secret `PYPI_API_TOKEN` (Settings →
+     Secrets and variables → Actions → New repository secret).
+   - Create a `pypi` environment (Settings → Environments → New environment)
+     — the workflow references `environment: pypi` for protection rules
+     (optional but recommended: require manual approval, restrict to `main`).
+   - Re-trigger by deleting and re-pushing the `py-v0.1.0` tag, or by pushing
+     a new tag for the next release. The existing `py-v0.1.0` tag will not
+     retroactively trigger the workflow because the workflow file did not
+     exist at push time.
+   Tag scheme is `py-vX.Y.Z` (distinct from the TS `vMAJOR.MINOR.PATCH` tags).
 
 2. ~~**LICENSE bundling**~~ — **DONE.** The root `LICENSE` is copied into
    `packages/fms-odata-spec-py/LICENSE` and declared as a wheel artifact and

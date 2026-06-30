@@ -1,0 +1,63 @@
+name: py-publish
+
+# Publishes fms-odata-spec to PyPI when a py-v* tag is pushed.
+#
+# Requires a repository secret named PYPI_API_TOKEN containing a PyPI
+# API token (https://pypi.org/manage/account/token/). On the very first
+# upload the token may be an account-scoped token; afterwards a
+# project-scoped token is recommended.
+#
+# Tag scheme: py-vX.Y.Z (distinct from the TS package's vX.Y.Z tags on
+# main, which are handled separately). See AGENTS.md.
+
+on:
+  push:
+    tags:
+      - "py-v*"
+
+defaults:
+  run:
+    working-directory: packages/fms-odata-spec-py
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-publish:
+    name: Build and publish to PyPI
+    runs-on: ubuntu-latest
+    environment: pypi
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: packages/fms-odata-spec-py/pyproject.toml
+
+      - name: Install build + publish tools
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Run tests
+        run: pytest -ra
+
+      - name: Build sdist and wheel
+        run: python -m build
+
+      - name: Publish to PyPI
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        run: twine upload --non-interactive dist/*
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-published
+          path: packages/fms-odata-spec-py/dist/
+          if-no-files-found: error
