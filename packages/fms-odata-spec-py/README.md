@@ -87,10 +87,11 @@ This package is versioned independently of `@fms-odata/spec-ts` and starts at
 > **IMPORTANT — these items must be addressed before publishing 0.1.0 to PyPI.**
 > See `AGENTS.md` at the repository root for the same list with more detail.
 
-- [ ] **PyPI publishing workflow** — add a `twine upload` job to CI gated on a
-      `PYPI_API_TOKEN` secret, triggered on tag pushes. Decide on a tag scheme
-      (e.g. `py-v0.1.0`) that does not collide with the existing TS `vX.Y.Z`
-      tags on `main`.
+- [ ] **PyPI publishing workflow** — `.github/workflows/py-publish.yml` exists
+      and triggers on `py-v*` tag pushes. Remaining: create a PyPI API token,
+      add it as the `PYPI_API_TOKEN` repo secret, optionally create a `pypi`
+      environment for protection rules, then re-push the tag to trigger. See
+      `AGENTS.md` for full steps.
 - [x] **LICENSE bundling** — DONE. `LICENSE` is copied into this directory
       and declared as a wheel artifact + sdist include in `pyproject.toml`;
       verified it ships in both the wheel and sdist.
