@@ -61,8 +61,47 @@ packages/
   fms-odata-spec-ts/             # Shared TypeScript types package (@fms-odata/spec-ts on npm)
     src/                        # Endpoint, query, auth, metadata, script, container, batch,
                                # webhook, schema, error, version type definitions
+  fms-odata-spec-py/             # Shared Python types package (fms-odata-spec on PyPI)
+    src/fms_odata_spec/         # Same surface as the TS package, as stdlib dataclasses
+    tests/                      # pytest suite
 _research/                      # Gitignored: cloned source repos used as input
 ```
+
+### Companion type packages
+
+The spec ships two independent, language-specific type packages that mirror the
+same API surface. They share no runtime dependency on each other and are
+versioned/published independently.
+
+| Package | Language | Registry | Install |
+| ------- | -------- | -------- | ------- |
+| `@fms-odata/spec-ts` | TypeScript | npm | `npm install @fms-odata/spec-ts` |
+| `fms-odata-spec` | Python | PyPI | `pip install fms-odata-spec` |
+
+**TypeScript package** (`packages/fms-odata-spec-ts/`):
+
+```bash
+cd packages/fms-odata-spec-ts
+npm install
+npm run build        # tsc -> dist/
+npm run typecheck    # tsc --noEmit
+```
+
+**Python package** (`packages/fms-odata-spec-py/`):
+
+```bash
+cd packages/fms-odata-spec-py
+python -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+pytest                           # run the test suite
+python -m build                  # build sdist + wheel into dist/
+```
+
+The Python folder is intentionally **not** part of any npm workspace glob; the
+two package managers are kept fully decoupled. Each package has its own CI
+workflow scoped to its own path filter (`.github/workflows/py-ci.yml` for
+Python).
 
 ## Version targeting
 
@@ -88,7 +127,8 @@ Where official docs and observed behavior diverge, both are documented and the d
 ## How downstream libraries use this
 
 - **Read the docs** to understand what the API supports and what it doesn't.
-- **Import the TypeScript types** from `packages/fms-odata-spec-ts` for shared type definitions (endpoint names, query option types, error codes, version feature flags).
+- **Import the TypeScript types** from `packages/fms-odata-spec-ts` (`@fms-odata/spec-ts` on npm) for shared type definitions in JS/TS projects.
+- **Import the Python types** from `packages/fms-odata-spec-py` (`fms-odata-spec` on PyPI) for shared type definitions in Python projects.
 - **Consume the JSON manifest** (`schema/fms-odata-capabilities.json`) to programmatically check feature availability per FileMaker Server version.
 - **Follow the reconciliation matrix** (docs/14-reconciliation.md) when aligning divergent implementations.
 
