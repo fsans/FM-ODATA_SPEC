@@ -91,9 +91,9 @@ This package is versioned independently of `@fms-odata/spec-ts` and starts at
       `PYPI_API_TOKEN` secret, triggered on tag pushes. Decide on a tag scheme
       (e.g. `py-v0.1.0`) that does not collide with the existing TS `vX.Y.Z`
       tags on `main`.
-- [ ] **LICENSE bundling** — copy `LICENSE` into this directory or add a
-      hatchling include for `../../LICENSE` so the sdist/wheel ships the
-      license file.
+- [x] **LICENSE bundling** — DONE. `LICENSE` is copied into this directory
+      and declared as a wheel artifact + sdist include in `pyproject.toml`;
+      verified it ships in both the wheel and sdist.
 - [ ] **CHANGELOG** — add `CHANGELOG.md` with the 0.1.0 entry.
 - [ ] **`ODataEntity[T]` ergonomics** — confirm the wrapping-dataclass shape
       (`envelope.entity.field`) is acceptable before the first release; it is a

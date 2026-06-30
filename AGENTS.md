@@ -97,11 +97,10 @@ python -m build                  # sdist + wheel into dist/
    on `main`; decide on a tag scheme (e.g. `py-v0.1.0`) to avoid collision with
    the existing `vMAJOR.MINOR.PATCH` TS tags.
 
-2. **LICENSE bundling** — `pyproject.toml` declares `license = "MIT"` and the
-   Python README links to the root `LICENSE`, but hatchling does NOT bundle the
-   root `LICENSE` into the sdist/wheel automatically. Either copy `LICENSE`
-   into `packages/fms-odata-spec-py/` or add a `[tool.hatch.build]` include for
-   `../../LICENSE`. PyPI will warn about a missing license file otherwise.
+2. ~~**LICENSE bundling**~~ — **DONE.** The root `LICENSE` is copied into
+   `packages/fms-odata-spec-py/LICENSE` and declared as a wheel artifact and
+   sdist include in `pyproject.toml`. Verified the LICENSE ships in both the
+   wheel (`dist-info/licenses/LICENSE`) and the sdist.
 
 3. **CHANGELOG** — no `CHANGELOG.md` exists for the Python package (the TS
    package has none either, so this is consistent). For semver discipline on
